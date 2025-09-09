@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { login } from '@/lib/auth';
+import { login, loginWithGoogle } from '@/lib/actions';
 
 export default function SignInPage() {
   return (
@@ -61,6 +61,10 @@ export default function SignInPage() {
             Login with Github
           </Button> */}
           <LoginButton />
+        </form>
+
+        <form action={loginWithGoogle}>
+          <Button type='submit'>Login with Google</Button>
         </form>
       </CardFooter>
     </Card>

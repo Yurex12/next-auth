@@ -1,7 +1,7 @@
 import Link from 'next/link';
-import { auth } from '../../auth';
+import { auth } from '@/auth';
 import { Button } from './ui/button';
-import { logout } from '@/lib/auth';
+import { logout } from '@/lib/actions';
 import LogoutButton from './LogoutButton';
 import LogoutButtonTranstition from './LogoutButtonTranstition';
 
@@ -35,10 +35,10 @@ export default async function Navbar() {
                   Home
                 </Link>
                 <Link
-                  href='/about'
+                  href='/dashboard'
                   className='text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200'
                 >
-                  About
+                  dashboard
                 </Link>
                 <Link
                   href='/services'
