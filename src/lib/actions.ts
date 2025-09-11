@@ -1,8 +1,16 @@
 'use server';
 import { signIn, signOut } from '@/auth';
-import { prisma } from './prisma';
 import bcrypt from 'bcryptjs';
+import { prisma } from './prisma';
+
+import { z } from 'zod';
 import { redirect } from 'next/navigation';
+
+const userSchema = z.object({
+  email: z.email(),
+  name: z.string().min(6, 'Username must be at least 6 characters.'),
+  password: z.string().min(6, 'Password must be at least 6 characters.'),
+});
 
 export const login = async () => await signIn('github', { redirectTo: '/' });
 
@@ -11,10 +19,32 @@ export const loginWithGoogle = async () =>
 
 export const logout = async () => await signOut({ redirectTo: '/auth/signin' });
 
-export async function createUser(formData: FormData) {
-  const name = formData.get('name') as string;
-  const email = formData.get('email') as string;
-  const password = formData.get('password') as string;
+export async function createUser(_: unknown, formData: FormData) {
+  const rawData = {
+    name: formData.get('name') as string,
+    email: formData.get('email') as string,
+    password: formData.get('password') as string,
+  };
+
+  const validatedFields = userSchema.safeParse(rawData);
+
+  if (!validatedFields.success) {
+    return {
+      success: false,
+      message: 'Please Enter correct values',
+      errors: z.flattenError(validatedFields.error),
+      inputsData: rawData,
+    };
+  }
+
+  const { email, name, password } = validatedFields.data;
+
+  const user = await prisma.user.findUnique({
+    where: { email: email },
+    select: { email: true, name: true, id: true },
+  });
+
+  if (user) return { success: false, message: 'User already exist.' };
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -26,48 +56,17 @@ export async function createUser(formData: FormData) {
     },
   });
 
-  redirect('/');
+  console.log(newUser);
+
+  redirect('/auth/signin');
+
+  // return { success: true, message: 'Reistration successful.', user: newUser };
 }
-// export async function createUser(formData: FormData) {
-//   try {
-//     const name = formData.get('name') as string;
-//     const email = formData.get('email') as string;
-//     const password = formData.get('password') as string;
 
-//     if (!name || !email || !password)
-//       return { success: false, message: 'User already exist.' };
-
-//     const userExist = await prisma.user.findUnique({ where: { email: email } });
-
-//     if (userExist) return { success: false, message: 'User already exist.' };
-
-//     const hashedPassword = await bcrypt.hash(password, 10);
-
-//     const newUser = await prisma.user.create({
-//       data: {
-//         name,
-//         email,
-//         password: hashedPassword,
-//       },
-//     });
-
-//     console.log('successful');
-
-//     return {
-//       success: true,
-//       message: 'User created successfully',
-//       user: {
-//         id: newUser.id,
-//         name: newUser.name,
-//         email: newUser.email,
-//         createdAt: newUser.createdAt,
-//       },
-//     };
-//   } catch (error) {
-//     console.error('Error creating user:', error);
-//     return {
-//       success: false,
-//       message: 'Something went wrong while creating user',
-//     };
-//   }
-// }
+export async function loginWithCredential(formData: FormData) {
+  await signIn('credentials', {
+    email: formData.get('email'),
+    password: formData.get('password'),
+    redirectTo: '/dashboard',
+  });
+}

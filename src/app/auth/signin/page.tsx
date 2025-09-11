@@ -1,3 +1,4 @@
+import { signIn } from '@/auth';
 import LoginButton from '@/components/LoginButton';
 import { Button } from '@/components/ui/button';
 import {
@@ -11,7 +12,12 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { createUser, login, loginWithGoogle } from '@/lib/actions';
+import {
+  createUser,
+  login,
+  loginWithCredential,
+  loginWithGoogle,
+} from '@/lib/actions';
 import Link from 'next/link';
 
 export default async function SignInPage() {
@@ -27,12 +33,13 @@ export default async function SignInPage() {
         </CardAction>
       </CardHeader>
       <CardContent>
-        <form action={createUser}>
+        <form action={loginWithCredential}>
           <div className='flex flex-col gap-6'>
             <div className='grid gap-2'>
               <Label htmlFor='email'>Email</Label>
               <Input
                 id='email'
+                name='email'
                 type='email'
                 placeholder='m@example.com'
                 required
@@ -48,15 +55,15 @@ export default async function SignInPage() {
                   Forgot your password?
                 </a>
               </div>
-              <Input id='password' type='password' required />
+              <Input id='password' name='password' type='password' required />
             </div>
           </div>
+          <Button type='submit' className='w-full'>
+            Login
+          </Button>
         </form>
       </CardContent>
       <CardFooter className='flex-col gap-2'>
-        <Button type='submit' className='w-full'>
-          Login
-        </Button>
         <form action={login}>
           {/* <Button variant='outline' className='w-full' type='submit'>
             Login with Github
