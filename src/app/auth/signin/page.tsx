@@ -1,5 +1,7 @@
-import { signIn } from '@/auth';
-import LoginButton from '@/components/LoginButton';
+import LoginGithubButton from '@/components/LoginGithubButton';
+import LoginGoogleButton from '@/components/LoginGoogleButton';
+import SigninForm from '@/components/SigninForm';
+
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -10,17 +12,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import {
-  createUser,
-  login,
-  loginWithCredential,
-  loginWithGoogle,
-} from '@/lib/actions';
+import { loginWithGithub, loginWithGoogle } from '@/lib/actions';
 import Link from 'next/link';
 
-export default async function SignInPage() {
+export default function SignInPage() {
   return (
     <Card className='w-full max-w-md'>
       <CardHeader>
@@ -33,46 +28,19 @@ export default async function SignInPage() {
         </CardAction>
       </CardHeader>
       <CardContent>
-        <form action={loginWithCredential}>
-          <div className='flex flex-col gap-6'>
-            <div className='grid gap-2'>
-              <Label htmlFor='email'>Email</Label>
-              <Input
-                id='email'
-                name='email'
-                type='email'
-                placeholder='m@example.com'
-                required
-              />
-            </div>
-            <div className='grid gap-2'>
-              <div className='flex items-center'>
-                <Label htmlFor='password'>Password</Label>
-                <a
-                  href='#'
-                  className='ml-auto inline-block text-sm underline-offset-4 hover:underline'
-                >
-                  Forgot your password?
-                </a>
-              </div>
-              <Input id='password' name='password' type='password' required />
-            </div>
-          </div>
-          <Button type='submit' className='w-full'>
-            Login
-          </Button>
-        </form>
+        <SigninForm />
+        {/* <SignupForm /> */}
       </CardContent>
       <CardFooter className='flex-col gap-2'>
-        <form action={login}>
+        <form action={loginWithGithub}>
           {/* <Button variant='outline' className='w-full' type='submit'>
             Login with Github
           </Button> */}
-          <LoginButton />
+          <LoginGithubButton />
         </form>
 
         <form action={loginWithGoogle}>
-          <Button type='submit'>Login with Google</Button>
+          <LoginGoogleButton />
         </form>
       </CardFooter>
     </Card>

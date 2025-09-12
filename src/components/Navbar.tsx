@@ -1,8 +1,5 @@
-import Link from 'next/link';
 import { auth } from '@/auth';
-import { Button } from './ui/button';
-import { logout } from '@/lib/actions';
-import LogoutButton from './LogoutButton';
+import Link from 'next/link';
 import LogoutButtonTranstition from './LogoutButtonTranstition';
 
 export default async function Navbar() {
@@ -10,7 +7,7 @@ export default async function Navbar() {
 
   return (
     <nav className='bg-white shadow-md'>
-      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+      <div className='w-full sm:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='flex justify-between items-center h-16'>
           {/* Logo */}
           <div className='flex-shrink-0'>
@@ -24,53 +21,43 @@ export default async function Navbar() {
             </div>
           </div>
 
-          {/* Navigation Links */}
-          {session?.user ? (
-            <>
-              <div className='ml-10 flex items-baseline space-x-4'>
-                <Link
-                  href='/home'
-                  className='text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200'
-                >
-                  Home
-                </Link>
-                <Link
-                  href='/dashboard'
-                  className='text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200'
-                >
-                  dashboard
-                </Link>
-                <Link
-                  href='/services'
-                  className='text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200'
-                >
-                  Services
-                </Link>
-                <Link
-                  href='/contact'
-                  className='text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200'
-                >
-                  Contact
-                </Link>
-              </div>
+          <div className='flex items-center gap-x-2'>
+            {session?.user ? (
+              <>
+                <div className='flex items-baseline space-x-1'>
+                  <Link
+                    href='/'
+                    className='text-gray-700 hover:text-blue-600 px-2 py-2 rounded-md text-sm font-medium transition-colors duration-200'
+                  >
+                    Home
+                  </Link>
+                  {session?.user?.role === 'admin' && (
+                    <Link
+                      href='/dashboard'
+                      className='text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200'
+                    >
+                      dashboard
+                    </Link>
+                  )}
+                </div>
 
-              {/* <form action={logout}>
+                {/* <form action={logout}>
                 <Button type='submit'>Signout</Button>
                 <LogoutButton />
               </form> */}
-              <LogoutButtonTranstition />
-            </>
-          ) : (
-            <>
-              <Link
-                href='/auth/signin'
-                className='border px-4 py-2 border-gray-500 rounded-md'
-              >
-                Login
-              </Link>
-            </>
-          )}
-          {/* Authentication */}
+                <LogoutButtonTranstition />
+              </>
+            ) : (
+              <>
+                <Link
+                  href='/auth/signin'
+                  className='border px-4 py-2 border-gray-500 rounded-md'
+                >
+                  Login
+                </Link>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </nav>

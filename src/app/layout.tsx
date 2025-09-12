@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/Navbar';
+import { Toaster } from 'react-hot-toast';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -28,6 +29,29 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-dvh`}
       >
+        <Toaster
+          position='top-center'
+          reverseOrder={false}
+          gutter={8}
+          containerClassName=''
+          containerStyle={{}}
+          toasterId='default'
+          toastOptions={{
+            // Define default options
+            className: '',
+            duration: 2000,
+
+            style: {
+              background: '#fff',
+              color: '#202124',
+            },
+
+            // Default options for specific types
+            success: {
+              duration: 3000,
+            },
+          }}
+        />
         <Navbar />
         <main className='flex items-center justify-center w-full mt-10'>
           {children}

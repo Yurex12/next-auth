@@ -8,5 +8,9 @@ export default async function Page() {
     redirect('/auth/signin');
   }
 
-  return <p className='mt-40'>Welcome {session.user.name}, you are a user</p>;
+  return (
+    <p className='font-bold text-xl'>
+      Welcome {session.user.name}, you are a user
+    </p>
+  );
 }
