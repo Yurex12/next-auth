@@ -57,7 +57,7 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
     maxAge: 30 * 24 * 60 * 60,
   },
   pages: {
-    signIn: '/signin',
+    signIn: '/auth/signin',
   },
   callbacks: {
     async jwt({ token, user }) {
@@ -78,6 +78,10 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
       return session;
     },
     authorized({ request, auth }) {
+      const { pathname } = request.nextUrl;
+
+      if (pathname === '/auth/signin' || pathname === '/auth/signup')
+        return true;
       return !!auth;
     },
   },
