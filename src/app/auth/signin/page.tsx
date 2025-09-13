@@ -2,7 +2,6 @@ import LoginGithubButton from '@/components/LoginGithubButton';
 import LoginGoogleButton from '@/components/LoginGoogleButton';
 import SigninForm from '@/components/SigninForm';
 
-import { Button } from '@/components/ui/button';
 import {
   Card,
   CardAction,
@@ -29,13 +28,9 @@ export default function SignInPage() {
       </CardHeader>
       <CardContent>
         <SigninForm />
-        {/* <SignupForm /> */}
       </CardContent>
       <CardFooter className='flex-col gap-2'>
         <form action={loginWithGithub}>
-          {/* <Button variant='outline' className='w-full' type='submit'>
-            Login with Github
-          </Button> */}
           <LoginGithubButton />
         </form>
 
