@@ -82,6 +82,7 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
 
       if (pathname === '/auth/signin' || pathname === '/auth/signup')
         return true;
+
       return !!auth;
     },
   },
