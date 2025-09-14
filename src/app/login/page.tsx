@@ -23,7 +23,7 @@ export default function SignInPage() {
           Enter your email below to login to your account
         </CardDescription>
         <CardAction>
-          <Link href='/auth/signup'>Sign Up</Link>
+          <Link href='/register'>Sign Up</Link>
         </CardAction>
       </CardHeader>
       <CardContent>

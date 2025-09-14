@@ -57,7 +57,7 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
     maxAge: 30 * 24 * 60 * 60,
   },
   pages: {
-    signIn: '/auth/signin',
+    signIn: '/login',
   },
   callbacks: {
     async jwt({ token, user }) {
@@ -77,8 +77,8 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
       }
       return session;
     },
-    authorized: async ({ request, auth }) => {
-      return !!auth;
-    },
+    // authorized({ request, auth }) {
+    //   return !!auth;
+    // },
   },
 });

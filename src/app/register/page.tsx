@@ -16,7 +16,7 @@ export default function SignInPage() {
         <CardTitle>Sign up to your account</CardTitle>
         <CardDescription>Enter your details to sign up</CardDescription>
         <CardAction>
-          <Link href='/auth/signin'>Login</Link>
+          <Link href='/login'>Login</Link>
         </CardAction>
       </CardHeader>
       <CardContent>
