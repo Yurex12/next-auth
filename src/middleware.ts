@@ -1,5 +1,7 @@
+// middleware.ts
 export { auth as middleware } from '@/auth';
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+  // Run middleware on all pages, except API routes, Next.js internals, and static files
+  matcher: ['/((?!api|_next|.*\\..*).*)'],
 };
