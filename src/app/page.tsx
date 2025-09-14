@@ -1,13 +1,6 @@
-import { auth } from '@/auth';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
 
 export default async function Home() {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect('/auth/signin');
-  }
   return (
     <div className='text-center px-4 space-y-4'>
       <h1 className='text-4xl font-bold'>Welcome to the homepage</h1>
