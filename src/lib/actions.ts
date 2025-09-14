@@ -12,7 +12,7 @@ export const loginWithGithub = async () =>
 export const loginWithGoogle = async () =>
   await signIn('google', { redirectTo: '/' });
 
-export const logout = async () => await signOut({ redirectTo: '/auth/signin' });
+export const logout = async () => await signOut({ redirectTo: '/login' });
 
 export async function createUser(userDetails: TuserSchema) {
   try {
