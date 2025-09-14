@@ -1,4 +1,5 @@
 import SignupForm from '@/components/SignupForm';
+import SocialLogin from '@/components/SocialLogin';
 import {
   Card,
   CardAction,
@@ -22,6 +23,7 @@ export default function SignInPage() {
       <CardContent>
         <SignupForm />
       </CardContent>
+      <SocialLogin />
     </Card>
   );
 }

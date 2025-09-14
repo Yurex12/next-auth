@@ -1,6 +1,5 @@
 import { auth } from '@/auth';
 import RegisteredUserList from '@/components/RegisteredUserList';
-import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 
@@ -8,10 +7,10 @@ export default async function DashboardPage() {
   const session = await auth();
 
   if (!session?.user) {
-    redirect('/auth/signin');
+    redirect('/login');
   }
 
-  if (session!.user.role !== 'admin') {
+  if (session.user.role !== 'admin') {
     redirect('/users');
   }
 

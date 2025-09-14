@@ -1,17 +1,14 @@
-import LoginGithubButton from '@/components/LoginGithubButton';
-import LoginGoogleButton from '@/components/LoginGoogleButton';
 import SigninForm from '@/components/SigninForm';
+import SocialLogin from '@/components/SocialLogin';
 
 import {
   Card,
   CardAction,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { loginWithGithub, loginWithGoogle } from '@/lib/actions';
 import Link from 'next/link';
 
 export default function SignInPage() {
@@ -29,15 +26,7 @@ export default function SignInPage() {
       <CardContent>
         <SigninForm />
       </CardContent>
-      <CardFooter className='flex-col gap-2'>
-        <form action={loginWithGithub}>
-          <LoginGithubButton />
-        </form>
-
-        <form action={loginWithGoogle}>
-          <LoginGoogleButton />
-        </form>
-      </CardFooter>
+      <SocialLogin />
     </Card>
   );
 }
