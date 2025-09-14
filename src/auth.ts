@@ -78,10 +78,12 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
       return session;
     },
     authorized({ request, auth }) {
-      const { pathname } = request.nextUrl;
+      // const { pathname } = request.nextUrl;
 
-      if (pathname === '/auth/signin' || pathname === '/auth/signup')
-        return true;
+      // if (pathname === '/auth/signin' || pathname === '/auth/signup')
+      //   return true;
+
+      // console.log(request.nextUrl.pathname, auth);
 
       return !!auth;
     },
