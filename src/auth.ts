@@ -57,7 +57,7 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
     maxAge: 30 * 24 * 60 * 60,
   },
   pages: {
-    signIn: '/login',
+    signIn: '/auth/signin',
   },
   callbacks: {
     async jwt({ token, user }) {
@@ -77,8 +77,27 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
       }
       return session;
     },
-    // authorized({ request, auth }) {
-    //   return !!auth;
-    // },
+    authorized({ auth, request }) {
+      const { pathname } = request.nextUrl;
+      const isLoggedIn = !!auth?.user;
+
+      // Allow public routes
+      if (
+        pathname.startsWith('/auth') || // login/register
+        pathname.startsWith('/api/public') || // any public API
+        pathname.startsWith('/_next') || // Next.js internals (CSS, JS)
+        pathname.startsWith('/favicon.ico') // static assets
+      ) {
+        return true;
+      }
+
+      // Example: protect /dashboard
+      // if (request.nextUrl.pathname.startsWith('/dashboard')) {
+      //   return isLoggedIn; // only logged-in users can access
+      // }
+
+      // Public routes remain open
+      return isLoggedIn;
+    },
   },
 });

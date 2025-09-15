@@ -4,20 +4,21 @@ import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 
 export default async function DashboardPage() {
-  const session = await auth();
+  // const session = await auth();
 
-  if (!session?.user) {
-    redirect('/login');
-  }
+  // if (!session?.user) {
+  //   redirect('/auth/singin');
+  // }
 
-  if (session.user.role !== 'admin') {
-    redirect('/users');
-  }
+  // if (session.user.role !== 'admin') {
+  //   redirect('/users');
+  // }
 
   return (
     <div>
       <h1 className='text-2xl md:text-4xl px-4'>
-        <span className='font-black'>Welcome Admin {session.user.name}</span>
+        {/* <span className='font-black'>Welcome Admin {session.user.name}</span> */}
+        welcome
       </h1>
 
       <Suspense fallback={<p>Loading...</p>}>
