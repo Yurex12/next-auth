@@ -6,24 +6,36 @@ import Google from 'next-auth/providers/google';
 import Credentials from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs';
 
-const prisma = new PrismaClient();
+// Singleton pattern for Prisma in serverless environments
+const globalForPrisma = globalThis as unknown as {
+  prisma: PrismaClient | undefined;
+};
+
+const prisma = globalForPrisma.prisma ?? new PrismaClient();
+
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 
 export const { auth, signIn, signOut, handlers } = NextAuth({
   adapter: PrismaAdapter(prisma),
   providers: [
-    GitHub,
-    Google,
+    GitHub({
+      clientId: process.env.AUTH_GITHUB_ID,
+      clientSecret: process.env.AUTH_GITHUB_SECRET,
+    }),
+    Google({
+      clientId: process.env.AUTH_GOOGLE_ID,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET,
+    }),
     Credentials({
       credentials: {
-        email: {},
-        password: {},
+        email: { label: 'Email', type: 'email' },
+        password: { label: 'Password', type: 'password' },
       },
       authorize: async (credentials) => {
-        // null was returned in all due to the fact that next-auth treats all error as same, it doesnt send generic errors to the client, so errors that returned null would be treated as CredentialsSignin error and others Configuration (db errors, network)
         try {
-          if (!credentials?.email || !credentials?.password)
-            // throw new Error('Kindly provide details.');
+          if (!credentials?.email || !credentials?.password) {
             return null;
+          }
 
           const email = credentials.email as string;
           const password = credentials.password as string;
@@ -36,7 +48,6 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
             user?.password && (await bcrypt.compare(password, user.password));
 
           if (!user || !isValidPassword) {
-            // throw new Error('Email or password is incorrect.');
             return null;
           }
 
@@ -46,8 +57,9 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
             name: user.name,
             role: user.role,
           };
-        } catch {
-          throw new Error('Something went wrong.');
+        } catch (error) {
+          console.error('Auth error:', error);
+          throw new Error('Authentication failed.');
         }
       },
     }),
@@ -66,7 +78,6 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
         token.name = user.name;
         token.role = user.role;
       }
-
       return token;
     },
     async session({ session, token }) {
@@ -77,8 +88,6 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
       }
       return session;
     },
-    authorized({ auth, request }) {
-      return !!auth?.user;
-    },
   },
+  debug: process.env.NODE_ENV === 'development',
 });
